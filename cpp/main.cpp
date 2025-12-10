@@ -15,7 +15,6 @@ Columbia Optimizer Framework
 #include "stdafx.h"
 #include "tasks.h"
 
-
 #include "global.h" // global variables
 
 #define LINEWIDTH 256 // buffer length of one text line

@@ -15,7 +15,6 @@ Columbia Optimizer Framework
 #include "query.h"
 #include "stdafx.h"
 
-
 #define LINEWIDTH 255   // buffer length of one text line
 #define MAXLENGTH 10240 // max length of the lisp expression
 

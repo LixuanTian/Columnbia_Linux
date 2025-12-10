@@ -16,7 +16,6 @@ Columbia Optimizer Framework
 #include "item.h"
 #include "logop.h"
 
-
 class EXPR;
 class QUERY;
 
