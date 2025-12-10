@@ -36,7 +36,7 @@ RULE_SET::RULE_SET(CString filename) : RuleCount(NUMOFRULES)
 	char *p;
 	int rule_count=0;
 	
-	if((fp = fopen(filename,"r"))==NULL) 
+	if((fp = fopen(filename.c_str(),"r"))==NULL) 
 		OUTPUT_ERROR("can not open file 'ruleset'");
 	
 	for(;;)
@@ -152,7 +152,7 @@ CString RULE_SET::Dump()
 	
 	for(int i=0; i<RuleCount; i++) 
 	{
-		temp.Format(" %d  %s\r\n", RuleVector[i],rule_set[i]->GetName() );
+		temp.Format(" %d  %s\r\n", RuleVector[i],rule_set[i]->GetName().c_str() );
 		os += temp;
 	}
 	return os;

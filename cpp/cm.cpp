@@ -51,7 +51,7 @@ CM::CM(CString filename)
 	char TextLine[LINEWIDTH]; // text line buffer
 	char *p;
 	
-	if((fp = fopen(filename,"r"))==NULL) 
+	if((fp = fopen(filename.c_str(),"r"))==NULL) 
 		OUTPUT_ERROR("can not open CM file");
 	
 	for(;;)

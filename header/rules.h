@@ -412,7 +412,7 @@ public :
 	//##ModelId=3B0C086A0053
 	CString Dump()
 	{	CString os;
-	os.Format("RULE %s ", name);
+	os.Format("RULE %s ", name.c_str());
 	return os;
 	};
 	

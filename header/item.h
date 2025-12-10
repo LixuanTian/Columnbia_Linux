@@ -12,7 +12,7 @@ Columbia Optimizer Framework
 #ifndef	 ITEM_H
 #define ITEM_H
 
-#include "Op.h"
+#include "op.h"
 
 /* ------------------------------------------------------------ */
 
@@ -76,7 +76,7 @@ public:
 	inline COST * get_cost() { return new COST(0); };
 	
 	//##ModelId=3B0C087502E2
-	CString Dump() { CString os; os.Format("ATTR(%s)",GetAttName(AttId)); return os;}
+	CString Dump() { CString os; os.Format("ATTR(%s)",GetAttName(AttId).c_str()); return os;}
 };
 
 //##ModelId=3B0C08750328
@@ -223,7 +223,7 @@ public :
 	//inline COST * get_cost() { return new COST(0); };
 	
 	//##ModelId=3B0C08760149
-	CString Dump() { CString os; os.Format("STR(%s)",value); return os;}
+	CString Dump() { CString os; os.Format("STR(%s)",value.c_str()); return os;}
 	
 }; // CONST_STR_OP
 
@@ -263,7 +263,7 @@ public :
 	//inline COST * get_cost() { return new COST(0); };
 	
 	//##ModelId=3B0C087601E9
-	CString Dump() { CString os; os.Format("SET(%s)",value); return os;};
+	CString Dump() { CString os; os.Format("SET(%s)",value.c_str()); return os;};
 	
 }; // CONST_SET_OP
 

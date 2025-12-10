@@ -66,7 +66,7 @@ ub4 lookup2(
 	len = length;
 	a = b = 0x9e3779b9;  /* the golden ratio; an arbitrary value */
 	c = initval;         /* the previous hash value */
-	register i = 0;		// How many bytes of k have we processed so far?
+	register int i = 0;		// How many bytes of k have we processed so far?
 	
 	/*---------------------------------------- handle most of the key */
 	while (len >= 12)
@@ -257,7 +257,7 @@ int KEYS_SET::ChMaxCuCard()
 		cucard1 = GetAttrCuCard(i);
 		collid = GetCollId(KeyArray[win]);
 		cname2 = GetCollName(collid);
-		if (strcmp(cname1, cname2) == 0)
+		if (strcmp(cname1.c_str(), cname2.c_str()) == 0)
 		{
 			cucard2 = GetAttrCuCard(win);
 			if (cucard1 >= cucard2)
@@ -308,12 +308,12 @@ CString KEYS_SET::Dump()
 	int i;
 	for(i=0; i< GetSize()-1; i++)
 	{
-		temp.Format("%s%s", GetAttName(KeyArray[i]) , "," );
+		temp.Format("%s%s", GetAttName(KeyArray[i]).c_str() , "," );
 		os += temp;
 	}
 	
 	if(GetSize()) 
-		temp.Format("%s%s", GetAttName(KeyArray[i]) ,")");
+		temp.Format("%s%s", GetAttName(KeyArray[i]).c_str() ,")");
 	else
 		temp.Format("%s", ")");
 	os += temp;
@@ -357,14 +357,14 @@ CString COLL_PROP::Dump()
 		"  UCard:" , UCard);
 	if (Keys->GetSize()>0)
 	{
-		temp.Format("%s%s", "  Order:" , OrderToString(Order) );
+		temp.Format("%s%s", "  Order:" , OrderToString(Order).c_str() );
 		os += temp;
 	}
 	
-	temp.Format("%s%s", "  Keys:", (*Keys).Dump() );
+	temp.Format("%s%s", "  Keys:", (*Keys).Dump().c_str() );
 	os += temp;
 	
-	temp.Format("%s%s%s", "  CandidateKey:" , (*CandidateKey).Dump(), "\r\n" );
+	temp.Format("%s%s%s", "  CandidateKey:" , (*CandidateKey).Dump().c_str(), "\r\n" );
 	os += temp;
 	
 	if (FKeyArray.GetSize()>0)
@@ -374,8 +374,8 @@ CString COLL_PROP::Dump()
 		for(int i=0; i< FKeyArray.GetSize(); i++)
 		{
 			if (i<FKeyArray.GetSize()-1)
-				temp.Format("%s%s", (*FKeyArray[i]).Dump(), "\r" );
-			else temp.Format("%s%s", (*FKeyArray[i]).Dump(), "\r\n" );
+				temp.Format("%s%s", (*FKeyArray[i]).Dump().c_str(), "\r" );
+			else temp.Format("%s%s", (*FKeyArray[i]).Dump().c_str(), "\r\n" );
 			os += temp;
 		}
 	}
@@ -395,8 +395,8 @@ void IND_PROP::update(CString NewName)
 CString IND_PROP::Dump()
 {
 	CString os;
-	os.Format("%s%s%s%s%s",	"  Type:" , IndexOrderToString(IndType),
-		"  Keys:" , (*Keys).Dump(), (Clustered == true ? "  Clustered" : "  not Clustered") ) ;
+	os.Format("%s%s%s%s%s",	"  Type:" , IndexOrderToString(IndType).c_str(),
+		"  Keys:" , (*Keys).Dump().c_str(), (Clustered == true ? "  Clustered" : "  not Clustered") ) ;
 	
 	return os;
 }
@@ -413,8 +413,8 @@ void BIT_IND_PROP::update(CString NewName)
 CString BIT_IND_PROP::Dump()
 {
 	CString os;
-	os.Format("%s%s%s%s",	"  Bit Attributes:" , (* BitAttr).Dump(),
-		"  Index Attributes:" , GetAttName(IndexAttr) );
+	os.Format("%s%s%s%s",	"  Bit Attributes:" , (* BitAttr).Dump().c_str(),
+		"  Index Attributes:" , GetAttName(IndexAttr).c_str() );
 	
 	return os;
 }
@@ -423,8 +423,8 @@ CString BIT_IND_PROP::Dump()
 CString FOREIGN_KEY::Dump()
 {
 	CString os;
-	os.Format("%s%s%s%s%s",	"(  Foreign Key:" , (* ForeignKey).Dump(),
-		"  reference to:" , (* RefKey).Dump(), "  )" );
+	os.Format("%s%s%s%s%s",	"(  Foreign Key:" , (* ForeignKey).Dump().c_str(),
+		"  reference to:" , (* RefKey).Dump().c_str(), "  )" );
 	
 	return os;
 }
@@ -446,8 +446,8 @@ delete ae;
 CString ATTR::Dump()
 {
 	CString os;
-	os.Format("%s%s%s%s%.0f%s%.0f%s%.0f ", GetAttName(AttId), " Domain:" , 
-		DomainToString(Cat->GetDomain(AttId)), " CuCard:", CuCard, " Min:", Min, " Max:", Max);
+	os.Format("%s%s%s%s%.0f%s%.0f%s%.0f ", GetAttName(AttId).c_str(), " Domain:" , 
+		DomainToString(Cat->GetDomain(AttId)).c_str(), " CuCard:", CuCard, " Min:", Min, " Max:", Max);
 	return os;
 };
 
@@ -455,7 +455,7 @@ CString ATTR::Dump()
 CString ATTR::attrDump()
 {
 	CString os;
-	os.Format("%s", GetAttName(AttId));
+	os.Format("%s", GetAttName(AttId).c_str());
 	return os;
 }
 
@@ -463,7 +463,7 @@ CString ATTR::attrDump()
 CString ATTR::DumpCOVE()
 {
 	CString os;
-	os.Format("%s %d ", GetAttName(AttId), (int)CuCard);
+	os.Format("%s %d ", GetAttName(AttId).c_str(), (int)CuCard);
 	return os;
 };
 
@@ -481,7 +481,8 @@ bool    SCHEMA::AddAttr(int Index, ATTR *attr)
 //##ModelId=3B0C08620033
 bool SCHEMA::InSchema(int AttId)
 {
-	for(int i=0;i<Size; i++)
+	int i;
+	for(i=0;i<Size; i++)
 		if( AttId==Attrs[i]->AttId )
 			break;
 		
@@ -530,9 +531,10 @@ SCHEMA * SCHEMA::projection( int * attrs, int size)
 	new_schema->TableId = new int [this->TableNum] ;
 	
     //add attribute sets from left operand
+	int index;
     for (int i = 0;  i < size;  i++)
     {
-		for(int index=0; index < this->Size; index++)
+		for(index=0; index < this->Size; index++)
 		{
 			if ( attrs[i] == this->Attrs[index]->AttId )  
 			{
@@ -544,10 +546,11 @@ SCHEMA * SCHEMA::projection( int * attrs, int size)
 				// get the table info for the new schema
 				int CollId = GetCollId(Attr->AttId);
 				
-				for(int i=0; i < new_schema->TableNum; i++)
-					if( CollId == new_schema->TableId[i] )	break;
+				int j;
+				for(j=0; j < new_schema->TableNum; j++)
+					if( CollId == new_schema->TableId[j] )	break;
 					
-					if( i == new_schema->TableNum )		                            // a new table in the schema
+					if( j == new_schema->TableNum )		                            // a new table in the schema
 						new_schema->TableId[ (new_schema->TableNum)++ ] = CollId;	// store the table id
 					
 					break;
@@ -679,10 +682,10 @@ CString LOG_COLL_PROP::Dump()
 {
 	CString os, temp;
 	os.Format("%s%.0f%s%.0f%s%s%s", "  Card: " , Card , "  UCard: " , UCard ,"\r\n",
-				    "Schema:\r\n", (*Schema).Dump());
+			    "Schema:\r\n", (*Schema).Dump().c_str());
 	if (CandidateKey->GetSize()>0)
 	{
-		temp.Format("%s%s%s", "CandidateKey:", (*CandidateKey).Dump(), "\r\n" );
+		temp.Format("%s%s%s", "CandidateKey:", (*CandidateKey).Dump().c_str(), "\r\n" );
 		os += temp;
 	}
 	
@@ -690,11 +693,12 @@ CString LOG_COLL_PROP::Dump()
 	{
 		temp.Format("%s", "  Foreign Keys:");
 		os += temp;
-		for(int i=0; i< FKeyList.GetSize(); i++)
+		int i;
+		for(i=0; i< FKeyList.GetSize(); i++)
 		{
 			if (i<FKeyList.GetSize()-1)
-				temp.Format("%s%s", (*FKeyList[i]).Dump(), "\r" );
-			else temp.Format("%s%s", (*FKeyList[i]).Dump(), "\r\n" );
+				temp.Format("%s%s", (*FKeyList[i]).Dump().c_str(), "\r" );
+			else temp.Format("%s%s", (*FKeyList[i]).Dump().c_str(), "\r\n" );
 			os += temp;
 		}
 	}
@@ -706,7 +710,7 @@ CString LOG_COLL_PROP::Dump()
 CString LOG_COLL_PROP::DumpCOVE()
 {
 	CString os;
-	os.Format("%d %d { %s }\r\n",(int)Card, (int)UCard,  (*Schema).DumpCOVE());
+	os.Format("%d %d { %s }\r\n",(int)Card, (int)UCard,  (*Schema).DumpCOVE().c_str());
 	return os;
 };
 
@@ -725,7 +729,8 @@ int GetCollId(int AttId)
 int GetCollId(CString CollName)
 {
 	int Size = CollTable.GetSize();
-	for(int i=0; i < Size; i++)
+	int i;
+	for(i=0; i < Size; i++)
 		if( CollName == CollTable[i] ) break;
 		
 		if(i == Size) 
@@ -742,7 +747,8 @@ int GetAttId(CString CollName, CString AttName)
 	
 	CString Name = CollName + "." + AttName; 
 	int Size = AttTable.GetSize();
-	for(int i=0; i < Size; i++)
+	int i;
+	for(i=0; i < Size; i++)
 	{
 		if( Name == AttTable[i] ) break;
 	}
@@ -762,7 +768,8 @@ int GetAttId(CString Name)
 	assert(pos!= -1);
 	
 	int Size = AttTable.GetSize();
-	for(int i=0; i < Size; i++)
+	int i;
+	for(i=0; i < Size; i++)
 		if( Name == AttTable[i] ) break;
 		
 		if(i == Size) // the entry not exist, new it
@@ -780,7 +787,8 @@ int GetIndId(CString CollName, CString IndName)
 {
 	CString Name = CollName + "." + IndName; 
 	int Size = IndTable.GetSize();
-	for(int i=0; i < Size; i++)
+	int i;
+	for(i=0; i < Size; i++)
 		if( Name == IndTable[i] ) break;
 		
 		if(i == Size) // the entry not exist, new it
@@ -794,7 +802,8 @@ int GetBitIndId(CString CollName, CString BitIndName)
 {
 	CString Name = CollName + "." + BitIndName; 
 	int Size = BitIndTable.GetSize();
-	for(int i=0; i < Size; i++)
+	int i;
+	for(i=0; i < Size; i++)
 		if( Name == BitIndTable[i] ) break;
 		
 		if(i == Size) // the entry not exist, new it
@@ -821,10 +830,10 @@ CString GetAttName(int AttId)
 //Transform A.B to B
 CString TruncName(CString AttName)
 {
-	char *p = strstr(AttName, ".");
+	const char *p = strstr(AttName.c_str(), ".");
 	assert(p);  //Input was not of the form A.B
 	p++; //skip over .
-	return p;
+	return CString(p);
 }
 
 CString GetIndName(int IndId)
@@ -908,8 +917,9 @@ CString IndexOrderToString(ORDER_INDEX p)
 // used by TRACE function
 CString Trim(CString PathName)
 {
-	int pos = PathName.ReverseFind('\\');
-	return (PathName.Mid( pos+1 ));
+	int pos = PathName.find_last_of('\\');
+	if(pos == CString::npos) return PathName;
+	return (PathName.substr( pos+1 ));
 };
 
 // skip the blank space	
@@ -1017,7 +1027,7 @@ CString PHYS_PROP::Dump()
 			: Order == sorted ? "sorted"
 			: Order == hashed ? "hashed"
 			: "UNKNOWN"
-			,	 Keys -> Dump() );
+			,	 Keys -> Dump().c_str() );
 	}
 	if (Order == sorted)
 	{
@@ -1139,10 +1149,8 @@ ReqdPhys(RP), UpperBd(U), Finished(false)
 	// get used physical memory
 	int GetUsedMemory()
 	{
-		MEMORYSTATUS ms;
-		ms.dwLength = sizeof(MEMORYSTATUS);
-		GlobalMemoryStatus(&ms);
-		
-		return (ms.dwTotalVirtual - ms.dwAvailVirtual);
+		// MEMORYSTATUS is Windows-specific, not available on Linux
+		// Return 0 as a placeholder for Linux compatibility
+		return 0;
 	}
 	

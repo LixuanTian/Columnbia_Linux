@@ -307,7 +307,7 @@ public:
 	CString Dump()
 	{	
 		CString os;
-		os.Format("%s%s%d%s%d%s",GetName(),"<",Index,",",Group,">");
+		os.Format("%s%s%d%s%d%s",GetName().c_str(),"<",Index,",",Group,">");
 		return os;
 	};
 	
@@ -399,17 +399,17 @@ public:
 	{	
 		CString os;
 		CString temp;
-		os.Format("%s%s",GetName()," <");
+		os.Format("%s%s",GetName().c_str()," <");
 		for (int i=0; i<AttsSize-1; i++)
 		{
-			temp.Format("%s%s", GetAttName(Atts[i]), ",");
+			temp.Format("%s%s", GetAttName(Atts[i]).c_str(), ",");
 			os += temp;
 		}
 		if (AttsSize==0) temp.Format("%s", "Empty set");
-		else temp.Format("%s", GetAttName(Atts[AttsSize-1]) );
+		else temp.Format("%s", GetAttName(Atts[AttsSize-1]).c_str() );
 		os += temp;
 		
-		temp.Format("%s%s%s", " AS ", RangeVar, " >");
+		temp.Format("%s%s%s", " AS ", RangeVar.c_str(), " >");
 		os += temp;
 		return os;
 	};

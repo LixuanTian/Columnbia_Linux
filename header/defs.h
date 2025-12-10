@@ -12,13 +12,12 @@ Columbia Optimizer Framework
 #ifndef DEFS_H
 #define DEFS_H
 
-#include "stdafx.h"
-
 /*
 ============================================================
 General definitions
 ============================================================
 */
+#include "linux_compat.h"
 #define KILO			1024       //For TPC-D sizes
 #define LINE_STRING     ("===========")
 
@@ -145,23 +144,25 @@ typedef int GRP_ID;     //ID of a Group
 #define PTRACE(format, object)  {if(TraceOn && !ForGlobalEpsPruning){ CString OutputString;	\
 	CString temp;				            \
 	temp.Format(format,object);		        \
+	CString trimFile = Trim(__FILE__);      \
 	OutputString.Format("%s%d%s%s%s%d%s",   \
 	"\r\n==", TraceDepth, "==",             \
-	Trim(__FILE__),",",__LINE__," ----- "); \
+	trimFile.c_str(),",",__LINE__," ----- "); \
 	OutputString += temp;			        \
-	if(WindowTrace) OutputWindow->Print(OutputString); \
-    if(FileTrace) OutputFile.Write(OutputString, OutputString.GetLength());	}}
+	if(WindowTrace) OutputWindow->Print(OutputString.c_str()); \
+    if(FileTrace) OutputFile.Write(OutputString.c_str(), OutputString.GetLength());	}}
     
 
 // trace two objects.  Format as above.
 #define PTRACE2(format,obj1,obj2)  {if(TraceOn&& !ForGlobalEpsPruning){ CString OutputString,temp;\
 	temp.Format(format,obj1,obj2);		               \
+	CString trimFile = Trim(__FILE__);                 \
 	OutputString.Format("%s%d%s%s%s%d%s",	           \
 	"\r\n==", TraceDepth, "==",                        \
-	Trim(__FILE__),",",__LINE__," ----- ");            \
+	trimFile.c_str(),",",__LINE__," ----- ");         \
 	OutputString += temp;			                   \
-	if(WindowTrace) OutputWindow->Print(OutputString); \
-if(FileTrace) OutputFile.Write(OutputString, OutputString.GetLength());	}}
+	if(WindowTrace) OutputWindow->Print(OutputString.c_str()); \
+if(FileTrace) OutputFile.Write(OutputString.c_str(), OutputString.GetLength());	}}
 
 //Print n tabs, then the character string.  No newlines except as in string.
 #define OUTPUTN(n, string) {if (!ForGlobalEpsPruning)\
@@ -174,35 +175,36 @@ if(FileTrace) OutputFile.Write(OutputString, OutputString.GetLength());	}}
 } \
 	temp.Format("%s", string);         \
 	OutputString += temp;              \
-	OutputWindow->Print(OutputString); \
-OutputFile.Write(OutputString, OutputString.GetLength());	}}
+	OutputWindow->Print(OutputString.c_str()); \
+OutputFile.Write(OutputString.c_str(), OutputString.GetLength());	}}
 
 // trace without line and file info.  No newlines except in format input.
 #define WTRACE(format, object)  {if(TraceOn){ CString OutputString;	      \
 	OutputString.Format(format,object) ;	                              \
-	if(WindowTrace) OutputWindow->Print(OutputString);                    \
-if(FileTrace) OutputFile.Write(OutputString, OutputString.GetLength());	}}
+	if(WindowTrace) OutputWindow->Print(OutputString.c_str());            \
+if(FileTrace) OutputFile.Write(OutputString.c_str(), OutputString.GetLength());	}}
 
 // Output the object to window and OutputFile, even if tracing is off.    
 // No newlines except in format input.
 //First one writes to window and trace file, second to file only.
 #define OUTPUT(format, object) {if (!ForGlobalEpsPruning) { CString OutputString;	\
 	OutputString.Format(format,object) ;	                                        \
-	OutputWindow->Print(OutputString);                                              \
-OutputFile.Write(OutputString, OutputString.GetLength());	}}
+	OutputWindow->Print(OutputString.c_str());                                      \
+OutputFile.Write(OutputString.c_str(), OutputString.GetLength());	}}
 
 //Write the object to OutputFile
 #define TRACE_FILE(format, object)  { CString OutputString;	\
 	OutputString.Format(format,object) ;	\
-OutputFile.Write(OutputString, OutputString.GetLength());	}
+OutputFile.Write(OutputString.c_str(), OutputString.GetLength());	}
 
 // display error message to Window and OutputFile
 #define OUTPUT_ERROR(text)	{ CString OutputString;          \
+	CString trimFile = Trim(__FILE__);                       \
 	OutputString.Format("%s%s%s%s%s%d%s",                    \
-	"\r\nERROR:" , text , ",file:" , Trim(__FILE__) ,        \
+	"\r\nERROR:" , text , ",file:" , trimFile.c_str() ,     \
 	",line:" , __LINE__ ,"\r\n");                            \
-	OutputWindow->Print(OutputString);                       \
-	OutputFile.Write(OutputString, OutputString.GetLength());\
+	OutputWindow->Print(OutputString.c_str());               \
+	OutputFile.Write(OutputString.c_str(), OutputString.GetLength());\
 abort(); }
 
 /* ==========  Optimizer related ============  */
@@ -267,7 +269,20 @@ extern int	Memo_M_Exprs;	//How Many M_EXPRs in the MEMO Structure?
 
 extern double GLOBAL_EPS;	// global epsilon value
 
+#ifdef LINUX_PORT
+// Dummy output window for Linux
+#include <cstdio>
+class DummyOutputWindow {
+public:
+	void ClearWindow() {}
+	void Print(const char* msg) { 
+		if (msg) printf("%s", msg); 
+	}
+};
+extern DummyOutputWindow* OutputWindow;
+#else
 extern CWcolView* OutputWindow;
+#endif
 extern QUERY*	Query;
 extern PTASKS	PTasks;
 extern SSP*	Ssp;

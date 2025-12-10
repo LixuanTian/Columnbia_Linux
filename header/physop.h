@@ -69,7 +69,7 @@ public :
 	//##ModelId=3B0C086E0198
 	CString Dump()
 	{	CString os;
-	os.Format("%s%s%s%s",GetName(),"(",GetCollName(FileId),")");
+	os.Format("%s%s%s%s",GetName().c_str(),"(",GetCollName(FileId).c_str(),")");
 	return os;
 	};
 	
@@ -726,7 +726,7 @@ public :
 	//##ModelId=3B0C0872007B
 	CString Dump()
 	{	CString os;
-	os.Format("%s%s%s%s",GetName(),"(",GetCollName(FileId),")");
+	os.Format("%s%s%s%s",GetName().c_str(),"(",GetCollName(FileId).c_str(),")");
 	return os;
 	};
 	

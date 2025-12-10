@@ -93,7 +93,7 @@ CString PTASKS::Dump()
 		CString temp;
 		for (TASK * task = first; task != NULL;  task = task -> next)
 		{	
-			temp.Format("\t%d -- %s\r\n", count++, task->Dump() );
+			temp.Format("\t%d -- %s\r\n", count++, task->Dump().c_str() );
 			os += temp;
 		}
 		os += "\t---- OPEN END ----";
@@ -115,8 +115,8 @@ void PTASKS::push (TASK * task)
 	if(COVETrace)
 	{
 		CString os;
-		os.Format("PushTaskList {%s}\r\n", task ->Dump() );
-		OutputCOVE.Write(os, os.GetLength());
+		os.Format("PushTaskList {%s}\r\n", task ->Dump().c_str() );
+		OutputCOVE.Write(os.c_str(), os.GetLength());
 	}
 } //PTASKS::push
 
@@ -131,7 +131,7 @@ TASK * PTASKS::pop ()
 	{
 		CString os;
 		os.Format("PopTaskList\r\n");
-		OutputCOVE.Write(os, os.GetLength());
+		OutputCOVE.Write(os.c_str(), os.GetLength());
 	}
     
 	return ( task );
@@ -198,7 +198,7 @@ void O_GROUP::perform ()
 	PTRACE ("O_GROUP %d performing", GrpID);
 	
 #ifndef IRPROP
-	PTRACE2 ("Context ID: %d , %s", ContextID, CONT::vc[ContextID]->Dump() );
+	PTRACE2 ("Context ID: %d , %s", ContextID, CONT::vc[ContextID]->Dump().c_str() );
 #endif
 	PTRACE ("Last flag is %d", Last);
     
@@ -319,7 +319,7 @@ void O_GROUP::perform ()
 			//push the last PhysMExpr
 			if (--count >= 0)
 			{
-				PTRACE("pushing O_INPUTS %s", PhysMExprs[count]->Dump());
+				PTRACE("pushing O_INPUTS %s", PhysMExprs[count]->Dump().c_str());
 				if (GlobepsPruning)
 				{
 					COST * eps_bound = new COST(*EpsBound);
@@ -332,7 +332,7 @@ void O_GROUP::perform ()
 			//push other PhysMExpr
 			while (--count >= 0)
 			{
-				PTRACE("pushing O_INPUTS %s", PhysMExprs[count]->Dump());
+				PTRACE("pushing O_INPUTS %s", PhysMExprs[count]->Dump().c_str());
 				if (GlobepsPruning)
 				{
 					COST * eps_bound = new COST(*EpsBound);
@@ -357,7 +357,7 @@ void O_GROUP::perform ()
 			//push the last PhysMExpr
 			if (--count>=0)
 			{
-				PTRACE("pushing O_INPUTS %s", PhysMExprs[count]->Dump());
+				PTRACE("pushing O_INPUTS %s", PhysMExprs[count]->Dump().c_str());
 				if (GlobepsPruning)
 				{
 					COST * eps_bound = new COST(*EpsBound);
@@ -370,7 +370,7 @@ void O_GROUP::perform ()
 			//push other PhysMExpr
 			while (--count >= 0)
 			{
-				PTRACE("pushing O_INPUTS %s", PhysMExprs[count]->Dump());
+				PTRACE("pushing O_INPUTS %s", PhysMExprs[count]->Dump().c_str());
 				if (GlobepsPruning)
 				{
 					COST * eps_bound = new COST(*EpsBound);
@@ -426,7 +426,7 @@ void O_GROUP::perform ()
 		os.Format("OPT_GROUP group %d,", GrpID);
 		temp.Format(" parent task %d,", ParentTaskNo);
 		os += temp;
-		temp.Format(" %s", CONT::vc[ContextID]->Dump());
+		temp.Format(" %s", CONT::vc[ContextID]->Dump().c_str());
 		os += temp;
 		return os;
     } //O_GROUP::Dump
@@ -446,7 +446,7 @@ void O_GROUP::perform ()
 		SET_TRACE Trace(true);
 		
 		PTRACE("E_GROUP %d performing", GrpID);
-		PTRACE2 ("Context ID: %d , %s", ContextID, CONT::vc[ContextID]->Dump() );
+		PTRACE2 ("Context ID: %d , %s", ContextID, CONT::vc[ContextID]->Dump().c_str() );
 		
 		GROUP * Group = Ssp->GetGroup(GrpID);
 		
@@ -475,7 +475,7 @@ void O_GROUP::perform ()
 			// only need to E_EXPR the first log expr, 
 			// because it will generate all logical exprs by applying appropriate rules
 			// it won't generate dups because rule bit vector 
-			PTRACE("pushing O_EXPR exploring %s", LogMExpr->Dump()); 
+			PTRACE("pushing O_EXPR exploring %s", LogMExpr->Dump().c_str()); 
 			// this logical mexpr will be the last optimized one, mark it as the last task for this group
 			if (GlobepsPruning)
 			{
@@ -520,12 +520,12 @@ void O_GROUP::perform ()
 //##ModelId=3B0C085E0041
 	void O_EXPR::perform()
     {
-		PTRACE2 ("O_EXPR performing, %s mexpr: %s ", explore ? "exploring" : "optimizing", MExpr->Dump() ); 
+		PTRACE2 ("O_EXPR performing, %s mexpr: %s ", explore ? "exploring" : "optimizing", MExpr->Dump().c_str() ); 
 #ifdef IRPROP
 		int GrpNo = MExpr->GetGrpID();
-		PTRACE2 ("ContextID: %d, %s", ContextID, (M_WINNER::mc[GrpNo]->GetPhysProp(ContextID))->Dump());
+		PTRACE2 ("ContextID: %d, %s", ContextID, (M_WINNER::mc[GrpNo]->GetPhysProp(ContextID))->Dump().c_str());
 #else
-		PTRACE2 ("Context ID: %d , %s", ContextID, CONT::vc[ContextID]->Dump() );
+		PTRACE2 ("Context ID: %d , %s", ContextID, CONT::vc[ContextID]->Dump().c_str() );
 #endif
 		PTRACE ("Last flag is %d", Last);
 		
@@ -536,7 +536,7 @@ void O_GROUP::perform ()
 		{
 			PTRACE("%s", "expression is an item_op");
 			//push the O_INPUT for this item_expr
-			PTRACE("pushing O_INPUTS %s", MExpr->Dump());
+			PTRACE("pushing O_INPUTS %s", MExpr->Dump().c_str());
 			if (GlobepsPruning)
 			{
 				COST * eps_bound = new COST(*EpsBound);
@@ -598,7 +598,7 @@ void O_GROUP::perform ()
 			
 			// push future tasks in reverse order (due to LIFO stack)
 			RULE * Rule = Move[moves].rule;
-			PTRACE ("pushing rule `%s'", Rule->GetName() );
+			PTRACE ("pushing rule `%s'", Rule->GetName().c_str() );
 			
 			// apply the rule
 			if (GlobepsPruning)
@@ -646,7 +646,7 @@ void O_GROUP::perform ()
     CString O_EXPR::Dump()
     {
 		CString os;
-		os.Format("O_EXPR group %s,", MExpr->Dump());
+		os.Format("O_EXPR group %s,", MExpr->Dump().c_str());
 		CString temp;
 		temp.Format(" parent task %d", ParentTaskNo);
 		os += temp;
@@ -802,12 +802,12 @@ We use this term instead of Lower Bound since we will use other lower bounds.
 //##ModelId=3B0C085E0307
 void O_INPUTS::perform ()
 {
-	PTRACE2 ("O_INPUT performing Input %d, expr: %s", InputNo,  MExpr->Dump() );
+	PTRACE2 ("O_INPUT performing Input %d, expr: %s", InputNo,  MExpr->Dump().c_str() );
 #ifdef IRPROP
 	int GrpNo = MExpr->GetGrpID();
-	PTRACE2 ("ContextID: %d, %s", ContextID, (M_WINNER::mc[GrpNo]->GetPhysProp(ContextID))->Dump());
+	PTRACE2 ("ContextID: %d, %s", ContextID, (M_WINNER::mc[GrpNo]->GetPhysProp(ContextID))->Dump().c_str());
 #else
-	PTRACE2 ("Context ID: %d , %s", ContextID, CONT::vc[ContextID]->Dump() );
+	PTRACE2 ("Context ID: %d , %s", ContextID, CONT::vc[ContextID]->Dump().c_str() );
 #endif
 	PTRACE ("Last flag is %d", Last);
 	
@@ -820,7 +820,7 @@ void O_INPUTS::perform ()
 #ifdef IRPROP
 	PHYS_PROP * LocalReqdProp = M_WINNER::mc[GrpNo]->GetPhysProp(ContextID);
 	COST * LocalUB = M_WINNER::mc[GrpNo]->GetUpperBd(LocalReqdProp);
-	PTRACE ("Bound (LocalUB) is %s", LocalUB->Dump());
+	PTRACE ("Bound (LocalUB) is %s", LocalUB->Dump().c_str());
 #else
 	PHYS_PROP * LocalReqdProp =  CONT::vc[ContextID] -> GetPhysProp();	//What prop is required
 	COST * LocalUB = CONT::vc[ContextID] -> GetUpperBd();
@@ -973,7 +973,7 @@ void O_INPUTS::perform ()
 		if(Pruning && CostSoFar >= *LocalUB) 
 		{
 			PTRACE2 ("Expr LowerBd %s, exceed Cond UpperBd %s,Pruning applied!",
-				CostSoFar.Dump(), LocalUB -> Dump() );
+				CostSoFar.Dump().c_str(), LocalUB -> Dump().c_str() );
 			
 			goto TerminateThisTask;
 		}
@@ -1032,8 +1032,8 @@ void O_INPUTS::perform ()
 				//if (Pruning && CostSoFar >= upper bound) terminate this task
 				if(Pruning &&  CostSoFar >= *LocalUB ) 
 				{
-					PTRACE2 ("Expr LowerBd %s, exceed Cond UpperBd %s,Pruning applied!",
-						CostSoFar.Dump(), LocalUB->Dump() );
+				PTRACE2 ("Expr LowerBd %s, exceed Cond UpperBd %s,Pruning applied!",
+					CostSoFar.Dump().c_str(), LocalUB->Dump().c_str() );
 					PTRACE("This happened at group %d ", IGNo);
 					
 					delete ReqProp;
@@ -1060,7 +1060,7 @@ void O_INPUTS::perform ()
 				COST * InputBd = new COST(*LocalUB); //Start with upper bound of G's context
 				if(Pruning)
 				{
-					PTRACE("LocalCost is %s", LocalCost->Dump());
+				PTRACE("LocalCost is %s", LocalCost->Dump().c_str());
 					CostSoFar.FinalCost(LocalCost, InputCost, arity);
 					*InputBd -= CostSoFar; //Subtract CostSoFar
 					*InputBd += *InputCost[input]; //Add IG's contribution to CostSoFar
@@ -1113,8 +1113,8 @@ void O_INPUTS::perform ()
 				//if (Pruning && CostSoFar >= upper bound) terminate this task
 				if(Pruning &&  CostSoFar >= *LocalUB ) 
 				{
-					PTRACE2 ("Expr LowerBd %s, exceed Cond UpperBd %s,Pruning applied!",
-						CostSoFar.Dump(), LocalUB->Dump() );
+				PTRACE2 ("Expr LowerBd %s, exceed Cond UpperBd %s,Pruning applied!",
+					CostSoFar.Dump().c_str(), LocalUB->Dump().c_str() );
 					PTRACE("This happened at group %d ", IGNo);
 					
 					delete IGContext;
@@ -1142,7 +1142,7 @@ void O_INPUTS::perform ()
 				COST * InputBd = new COST(*LocalUB); //Start with upper bound of G's context
 				if(Pruning)
 				{
-					PTRACE("LocalCost is %s", LocalCost->Dump());
+				PTRACE("LocalCost is %s", LocalCost->Dump().c_str());
 					CostSoFar.FinalCost(LocalCost, InputCost, arity);
 					*InputBd -= CostSoFar; //Subtract CostSoFar
 					*InputBd += *InputCost[input]; //Add IG's contribution to CostSoFar
@@ -1154,7 +1154,7 @@ void O_INPUTS::perform ()
 				CONT::vc.Add (InputContext);
 				//Push O_GROUP
 				int ContID = CONT::vc.GetSize()-1;
-				PTRACE2("push O_GROUP %d, %s", IGNo, CONT::vc[ContID] -> Dump());
+		PTRACE2("push O_GROUP %d, %s", IGNo, CONT::vc[ContID] -> Dump().c_str());
 				
 				if (GlobepsPruning)
 				{
@@ -1194,7 +1194,7 @@ void O_INPUTS::perform ()
 			if( !(*LocalReqdProp == *OutputPhysProp) )
 			{
 				PTRACE2("physical epxr: %s does not satisfy required phys_prop: %s", 
-					MExpr->Dump(), LocalReqdProp->Dump());
+					MExpr->Dump().c_str(), LocalReqdProp->Dump().c_str());
 				delete  OutputPhysProp;
 				
 				goto TerminateThisTask;
@@ -1236,17 +1236,17 @@ void O_INPUTS::perform ()
 		}
 #endif
 		
-		CostSoFar.FinalCost( LocalCost, InputCost, arity);
-		PTRACE ("Expression's Cost is %s",CostSoFar.Dump());
+	CostSoFar.FinalCost( LocalCost, InputCost, arity);
+	PTRACE ("Expression's Cost is %s",CostSoFar.Dump().c_str());
 #ifdef _COSTS_
-		OUTPUT("COSTED %s  ", MExpr-> Dump() );
-		OUTPUT("%s\r\n", CostSoFar.Dump() );
+	OUTPUT("COSTED %s  ", MExpr-> Dump().c_str() );
+	OUTPUT("%s\r\n", CostSoFar.Dump().c_str() );
 #endif	
 		
-		if (GlobepsPruning)
-		{
-			PTRACE("Current Epsilon Bound is %s", EpsBound->Dump());
-			//If global epsilon pruning is on, we may have an easy winner
+	if (GlobepsPruning)
+	{
+		PTRACE("Current Epsilon Bound is %s", EpsBound->Dump().c_str());
+		//If global epsilon pruning is on, we may have an easy winner
 			if( *EpsBound >= CostSoFar )
 			{
 				//we are done with this search, we have a final winner
@@ -1308,11 +1308,11 @@ void O_INPUTS::perform ()
 		}
 #endif
 		
-		//Check that winner satisfies current context 
-		if( CostSoFar >= *LocalUB ) 
-		{
-			PTRACE2 ("total cost too expensive: totalcost %s >= upperbd %s",
-				CostSoFar.Dump(), LocalUB->Dump());
+	//Check that winner satisfies current context 
+	if( CostSoFar >= *LocalUB ) 
+	{
+		PTRACE2 ("total cost too expensive: totalcost %s >= upperbd %s",
+			CostSoFar.Dump().c_str(), LocalUB->Dump().c_str());
 			
 			goto TerminateThisTask;			
 		}
@@ -1337,11 +1337,11 @@ void O_INPUTS::perform ()
 				// decrement the counter of old winner and if it becomes 0, delete it
 				OldWinner->DecCounter();
 				
-				if (OldWinner->GetCounter() == 0)
-				{
-					PTRACE("Deleted Physical MExpr %s  !!!\n", OldWinner->Dump());
-					Group->DeletePhysMExpr(OldWinner);
-				}
+			if (OldWinner->GetCounter() == 0)
+			{
+				PTRACE("Deleted Physical MExpr %s  !!!\n", OldWinner->Dump().c_str());
+				Group->DeletePhysMExpr(OldWinner);
+			}
 			}
 			
 			// update the multiwinner with new winner MEXPR and its cost
@@ -1358,12 +1358,12 @@ void O_INPUTS::perform ()
 			// set the flag, so that the changed search space is output onto the trace
 			Group->set_changed(true);
 			
-			// if the new winner is not good for any of the contexts, delete it
-			if ((ContNo ==0 ) && (MExpr->GetCounter() == 0) )
-			{
-				PTRACE("New winner %s is not cheaper than old winner, so deleted !!!", MExpr->Dump());
-				Group->DeletePhysMExpr(MExpr);
-			}
+		// if the new winner is not good for any of the contexts, delete it
+		if ((ContNo ==0 ) && (MExpr->GetCounter() == 0) )
+		{
+			PTRACE("New winner %s is not cheaper than old winner, so deleted !!!", MExpr->Dump().c_str());
+			Group->DeletePhysMExpr(MExpr);
+		}
 			
 			delete this;
 			return;
@@ -1380,10 +1380,10 @@ void O_INPUTS::perform ()
 			COST * WinCost = new COST(CostSoFar);
 			LocalGroup -> NewWinner(LocalReqdProp, MExpr, WinCost, Last);
 			
-			// update the upperbound of the current context
-			CONT::vc[ContextID]->SetUpperBound(CostSoFar);
-			
-			PTRACE ("New winner, update upperBd : %s", CostSoFar.Dump() );	
+		// update the upperbound of the current context
+		CONT::vc[ContextID]->SetUpperBound(CostSoFar);
+		
+		PTRACE ("New winner, update upperBd : %s", CostSoFar.Dump().c_str() );
 			//delete CostSoFar;
 			
 			goto TerminateThisTask;
@@ -1404,9 +1404,9 @@ TerminateThisTask :
 			CString os;
 			M_EXPR * TempME = LocalWinner ->GetMPlan();
 			os.Format("Terminate: replaced winner with %s, %s, %s\r\n", 
-				LocalReqdProp-> Dump(), TempME? TempME ->Dump(): " NULL ", 
-				LocalWinner->GetCost()->Dump());
-			PTRACE("%s", os);
+				LocalReqdProp-> Dump().c_str(), TempME? TempME ->Dump().c_str(): " NULL ", 
+				LocalWinner->GetCost()->Dump().c_str());
+			PTRACE("%s", os.c_str());
 #endif
 		}
 #endif
@@ -1437,19 +1437,19 @@ TerminateThisTask :
 //##ModelId=3B0C085E0311
     CString O_INPUTS::Dump()
     {
-		CString os;
-		CString temp;
-		os.Format("O_INPUTS expression: %s,", MExpr->Dump());
-		temp.Format(" parent task %d,", ParentTaskNo);
-		os += temp;
+	CString os;
+	CString temp;
+	os.Format("O_INPUTS expression: %s,", MExpr->Dump().c_str());
+	temp.Format(" parent task %d,", ParentTaskNo);
+	os += temp;
 #ifdef IRPROP
-		int GrpNo = MExpr->GetGrpID();
-		temp.Format(" %s", (M_WINNER::mc[GrpNo]->GetPhysProp(ContextID))->Dump());
-		os += temp;
-		return os;
+	int GrpNo = MExpr->GetGrpID();
+	temp.Format(" %s", (M_WINNER::mc[GrpNo]->GetPhysProp(ContextID))->Dump().c_str());
+	os += temp;
+	return os;
 #else
-		temp.Format(" %s", CONT::vc[ContextID]->Dump());
-		os += temp;
+	temp.Format(" %s", CONT::vc[ContextID]->Dump().c_str());
+	os += temp;
 		return os;
 #endif
     } //Dump
@@ -1505,11 +1505,11 @@ TerminateThisTask :
 //##ModelId=3B0C085F0133
 	void APPLY_RULE::perform()
     {
-		CONT * Context = CONT::vc[ContextID];
-		
-		PTRACE2 ("APPLY_RULE performing, rule: %s expression: %s", 
-			Rule->GetName(), MExpr->Dump() );
-		PTRACE2 ("Context ID: %d , %s", ContextID, CONT::vc[ContextID]->Dump() );
+	CONT * Context = CONT::vc[ContextID];
+	
+	PTRACE2 ("APPLY_RULE performing, rule: %s expression: %s", 
+		Rule->GetName().c_str(), MExpr->Dump().c_str() );
+	PTRACE2 ("Context ID: %d , %s", ContextID, CONT::vc[ContextID]->Dump().c_str() );
 		PTRACE ("Last flag is %d", Last);
 		
         //if stop generating logical expression when epsilon prune is applied
@@ -1517,9 +1517,9 @@ TerminateThisTask :
 #ifndef _GEN_LOG
         //Check that this context is not done
         if(Context -> is_done())
-		{
+	{
             PTRACE("Context: %s is done", 
-				Context->GetPhysProp()->Dump());
+			Context->GetPhysProp()->Dump().c_str());
             delete this;
             return;
         }
@@ -1528,9 +1528,9 @@ TerminateThisTask :
 		//if this context is done and the substitute is physical, if the substitute
 		//is logical continue
         if(Context -> is_done() && Rule->is_log_to_phys())
-		{
+	{
             PTRACE("Context: %s is done", 
-				Context->GetPhysProp()->Dump());
+			Context->GetPhysProp()->Dump().c_str());
             delete this;
             return;
         }
@@ -1583,7 +1583,7 @@ TerminateThisTask :
 			// There must be a Binding since advance() returned non-null.
 			// Extract the bound EXPR from the bindery
 			before = bindery -> extract_expr ();
-			PTRACE ("new Binding is: %s", before->Dump() );
+		PTRACE ("new Binding is: %s", before->Dump().c_str() );
 #ifdef _DEBUG
 			Bindings[Rule->get_index()]++;
 #endif
@@ -1593,10 +1593,10 @@ TerminateThisTask :
 			
 			if (! Rule->condition ( before, MExpr, ContextID) )
 			{ 
-				PTRACE ("Binding FAILS condition function, expr: %s",MExpr->Dump() );
+			PTRACE ("Binding FAILS condition function, expr: %s",MExpr->Dump().c_str() );
 				continue;	// try to find another binding
 			}
-			PTRACE ("Binding SATISFIES condition function.  Mexpr: %s",MExpr->Dump() );
+		PTRACE ("Binding SATISFIES condition function.  Mexpr: %s",MExpr->Dump().c_str() );
 			
 #ifdef _DEBUG
 			Conditions[Rule -> get_index()]++;
@@ -1606,7 +1606,7 @@ TerminateThisTask :
 			
 			assert(after != NULL) ;
 			
-			PTRACE("substitute expr is : %s", after->Dump() );
+		PTRACE("substitute expr is : %s", after->Dump().c_str() );
 			
 			// include substitute in MEMO, find duplicates, etc.
 			GRP_ID group_no = MExpr->GetGrpID();
@@ -1624,14 +1624,14 @@ TerminateThisTask :
 			// If substitute was already known 
 			if (NewMExpr == NULL)
 			{
-				PTRACE("duplicate substitute %s", after->Dump());
+			PTRACE("duplicate substitute %s", after->Dump().c_str());
 				
 				delete after;		// "after" no longer used
 				
 				continue;	// try to find another substitute
 			}	
 			
-			PTRACE("New Mexpr is : %s", NewMExpr->Dump() );
+		PTRACE("New Mexpr is : %s", NewMExpr->Dump().c_str() );
 			Memo_M_Exprs++;
 			PTRACE("New MEXPR %d", 3);
 			PTRACE("Memo_M_Exprs value is %d", Memo_M_Exprs);
@@ -1656,8 +1656,8 @@ TerminateThisTask :
 			if (explore ) // optimizer is exploring, the new mexpr must be logical expr
 			{
 				assert( NewMExpr->GetOp()->is_logical() );
-				PTRACE ("new task to explore new expression, \
-					pushing O_EXPR exploring expr: %s", NewMExpr->Dump() );
+			PTRACE ("new task to explore new expression, \
+				pushing O_EXPR exploring expr: %s", NewMExpr->Dump().c_str() );
 				if (GlobepsPruning)
 				{
 					COST * eps_bound = new COST(*EpsBound);
@@ -1671,7 +1671,7 @@ TerminateThisTask :
 				// for a logical op, try further transformations
 				if (NewMExpr->GetOp()->is_logical() )
 				{
-					PTRACE ("new task to optimize new expression,pushing O_EXPR, expr: %s", NewMExpr->Dump() );
+				PTRACE ("new task to optimize new expression,pushing O_EXPR, expr: %s", NewMExpr->Dump().c_str() );
 					if (GlobepsPruning)
 					{
 						COST * eps_bound = new COST(*EpsBound);
@@ -1686,7 +1686,7 @@ TerminateThisTask :
 					/* must be done even if op_arg -> arity == 0 in order to calculate costs */
 					assert( NewMExpr->GetOp()->is_physical() );
 					
-					PTRACE ("new task to optimize inputs,pushing O_INPUT, epxr: %s", NewMExpr->Dump() );
+				PTRACE ("new task to optimize inputs,pushing O_INPUT, epxr: %s", NewMExpr->Dump().c_str() );
 					if (GlobepsPruning)
 					{
 						COST * eps_bound = new COST(*EpsBound);
@@ -1735,24 +1735,24 @@ TerminateThisTask :
 			// There must be a Binding since advance() returned non-null.
 			// Extract the bound EXPR from the bindery
 			before = bindery -> extract_expr ();
-			PTRACE ("new Binding is: %s", before->Dump() );
+		PTRACE ("new Binding is: %s", before->Dump().c_str() );
 			
 			// check the rule's context function
 			CONT * Cont = CONT::vc[ContextID] ;
 			PHYS_PROP * ReqdProp =  Cont -> GetPhysProp();	//What prop is required of
 			if (! Rule->condition ( before, MExpr, ReqdProp) )
 			{ 
-				PTRACE ("Binding FAILS condition function, expr: %s",MExpr->Dump() );
+			PTRACE ("Binding FAILS condition function, expr: %s",MExpr->Dump().c_str() );
 				continue;	// try to find another binding
 			}
-			PTRACE ("Binding SATISFIES condition function.  Mexpr: %s",MExpr->Dump() );
+		PTRACE ("Binding SATISFIES condition function.  Mexpr: %s",MExpr->Dump().c_str() );
 			
 			// try to derive a new substitute expression
 			after = Rule -> next_substitute (before, ReqdProp);
 			
 			assert(after != NULL) ;
 			
-			PTRACE("substitute expr is : %s", after->Dump() );
+		PTRACE("substitute expr is : %s", after->Dump().c_str() );
 			
 			// include substitute in MEMO, find duplicates, etc.
 			GRP_ID group_no = MExpr->GetGrpID();
@@ -1770,14 +1770,14 @@ TerminateThisTask :
 			// If substitute was already known 
 			if (NewMExpr == NULL)
 			{
-				PTRACE("duplicate substitute %s", after->Dump());
+			PTRACE("duplicate substitute %s", after->Dump().c_str());
 				
 				delete after;		// "after" no longer used
 				
 				continue;	// try to find another substitute
 			}	
 			
-			PTRACE("New Mexpr is : %s", NewMExpr->Dump() );
+		PTRACE("New Mexpr is : %s", NewMExpr->Dump().c_str() );
 			
 			delete after;		// "after" no longer used
 			
@@ -1856,7 +1856,7 @@ TerminateThisTask :
 			{
 				assert( AfterArray[num_afters].m_expr->GetOp()->is_logical() );
 				PTRACE ("new task to explore new expression, \
-					pushing O_EXPR exploring expr: %s", Afters[num_afters].m_expr->Dump() );
+				pushing O_EXPR exploring expr: %s", Afters[num_afters].m_expr->Dump().c_str() );
 				PTasks.push (new O_EXPR (Afters[num_afters].m_expr, true, ContextID, TaskNo, Flag));
 				
 			} // optimizer is exploring
@@ -1865,8 +1865,8 @@ TerminateThisTask :
 				// for a logical op, try further transformations
 				if (Afters[num_afters].m_expr->GetOp()->is_logical() )
 				{
-					PTRACE ("new task to optimize new expression,pushing O_EXPR, expr: %s", 
-						Afters[num_afters].m_expr->Dump() );
+				PTRACE ("new task to optimize new expression,pushing O_EXPR, expr: %s", 
+					Afters[num_afters].m_expr->Dump().c_str() );
 					PTasks.push (new O_EXPR (Afters[num_afters].m_expr, false, ContextID, TaskNo, Flag));
 				} // further transformations to optimize new expr
 				else
@@ -1875,8 +1875,8 @@ TerminateThisTask :
 					/* must be done even if op_arg -> arity == 0 in order to calculate costs */
 					assert( Afters[num_afters].m_expr->GetOp()->is_physical() );
 					
-					PTRACE ("new task to optimize inputs,pushing O_INPUT, epxr: %s", 
-						Afters[num_afters].m_expr->Dump() );
+				PTRACE ("new task to optimize inputs,pushing O_INPUT, epxr: %s", 
+					Afters[num_afters].m_expr->Dump().c_str() );
 					PTasks.push (new O_INPUTS (Afters[num_afters].m_expr, ContextID, TaskNo, Flag) );
 				} // for a physical operator, optimize the inputs
 				
@@ -1901,10 +1901,10 @@ TerminateThisTask :
 //##ModelId=3B0C085F013C
     CString APPLY_RULE::Dump()
     {
-		CString os;
-		
-		os.Format("APPLY_RULE rule: %s, mexpr %s, parent task %d", Rule->Dump(), 
-			MExpr->Dump(), ParentTaskNo);
-		
-		return os;
+	CString os;
+	
+	os.Format("APPLY_RULE rule: %s, mexpr %s, parent task %d", Rule->Dump().c_str(), 
+		MExpr->Dump().c_str(), ParentTaskNo);
+	
+	return os;
     } //Dump

@@ -217,12 +217,12 @@ CString LOOPS_JOIN::Dump()
 	
 	for (i=0; (size > 0) && (i< size-1); i++) 
 	{
-		temp.Format("%s%s",GetAttName(lattrs[i]),",");
+		temp.Format("%s%s",GetAttName(lattrs[i]).c_str(),",");
 		os += temp;
 	}
 	
 	if( size > 0 ) 
-		temp.Format("%s%s%s",GetAttName(lattrs[i]),
+		temp.Format("%s%s%s",GetAttName(lattrs[i]).c_str(),
 		">," , "<");
 	else
 		temp.Format("%s%s", ">," , "<");
@@ -231,12 +231,12 @@ CString LOOPS_JOIN::Dump()
 	
 	for (i=0; (size > 0) && (i< size-1) ; i++) 
 	{
-		temp.Format("%s%s", GetAttName(rattrs[i]),",");
+		temp.Format("%s%s", GetAttName(rattrs[i]).c_str(),",");
 		os += temp;
 	}
 	
 	if(size>0) 
-		temp.Format("%s%s",GetAttName(rattrs[i]), ">)");
+		temp.Format("%s%s",GetAttName(rattrs[i]).c_str(), ">)");
 	else 
 		temp.Format("%s",">)");
 	
@@ -409,12 +409,12 @@ CString LOOPS_INDEX_JOIN::Dump()
 	
 	for (i=0; (size > 0) && (i< size-1); i++) 
 	{
-		temp.Format("%s%s",GetAttName(lattrs[i]),",");
+		temp.Format("%s%s",GetAttName(lattrs[i]).c_str(),",");
 		os += temp;
 	}
 	
 	if( size > 0 ) 
-		temp.Format("%s%s%s",GetAttName(lattrs[i]),
+		temp.Format("%s%s%s",GetAttName(lattrs[i]).c_str(),
 		">," , "<");
 	else
 		temp.Format("%s%s", ">," , "<");
@@ -423,18 +423,18 @@ CString LOOPS_INDEX_JOIN::Dump()
 	
 	for (i=0; (size > 0) && (i< size-1) ; i++) 
 	{
-		temp.Format("%s%s", GetAttName(rattrs[i]),",");
+		temp.Format("%s%s", GetAttName(rattrs[i]).c_str(),",");
 		os += temp;
 	}
 	
 	if(size>0) 
-		temp.Format("%s%s",GetAttName(rattrs[i]), ">)");
+		temp.Format("%s%s",GetAttName(rattrs[i]).c_str(), ">)");
 	else 
 		temp.Format("%s",">)");
 	
 	os += temp;
 	
-	temp.Format("Index on %s", GetCollName(CollId) );
+	temp.Format("Index on %s", GetCollName(CollId).c_str() );
 	os += temp;
 	
 	return os;
@@ -498,12 +498,12 @@ CString MERGE_JOIN::Dump()
 	
 	for (i=0; (size > 0) && (i< size-1); i++) 
 	{
-		temp.Format("%s%s",GetAttName(lattrs[i]),",");
+		temp.Format("%s%s",GetAttName(lattrs[i]).c_str(),",");
 		os += temp;
 	}
 	
 	if( size > 0 ) 
-		temp.Format("%s%s%s",GetAttName(lattrs[i]),
+		temp.Format("%s%s%s",GetAttName(lattrs[i]).c_str(),
 		">," , "<");
 	else
 		temp.Format("%s%s", ">," , "<");
@@ -512,12 +512,12 @@ CString MERGE_JOIN::Dump()
 	
 	for (i=0; (size > 0) && (i< size-1) ; i++) 
 	{
-		temp.Format("%s%s", GetAttName(rattrs[i]),",");
+		temp.Format("%s%s", GetAttName(rattrs[i]).c_str(),",");
 		os += temp;
 	}
 	
 	if(size>0) 
-		temp.Format("%s%s",GetAttName(rattrs[i]), ">)");
+		temp.Format("%s%s",GetAttName(rattrs[i]).c_str(), ">)");
 	else 
 		temp.Format("%s",">)");
 	
@@ -631,12 +631,12 @@ CString HASH_JOIN::Dump()
 	
 	for (i=0; (size > 0) && (i< size-1); i++) 
 	{
-		temp.Format("%s%s",GetAttName(lattrs[i]),",");
+		temp.Format("%s%s",GetAttName(lattrs[i]).c_str(),",");
 		os += temp;
 	}
 	
 	if( size > 0 ) 
-		temp.Format("%s%s%s",GetAttName(lattrs[i]),
+		temp.Format("%s%s%s",GetAttName(lattrs[i]).c_str(),
 		">," , "<");
 	else
 		temp.Format("%s%s", ">," , "<");
@@ -645,12 +645,12 @@ CString HASH_JOIN::Dump()
 	
 	for (i=0; (size > 0) && (i< size-1) ; i++) 
 	{
-		temp.Format("%s%s", GetAttName(rattrs[i]),",");
+		temp.Format("%s%s", GetAttName(rattrs[i]).c_str(),",");
 		os += temp;
 	}
 	
 	if(size>0) 
-		temp.Format("%s%s",GetAttName(rattrs[i]), ">)");
+		temp.Format("%s%s",GetAttName(rattrs[i]).c_str(), ">)");
 	else 
 		temp.Format("%s",">)");
 	
@@ -819,11 +819,11 @@ CString P_PROJECT::Dump()
 	
 	for (i=0; (size > 0) && (i< size-1); i++) 
 	{
-		temp.Format("%s%s", GetAttName(attrs[i]), ",");
+		temp.Format("%s%s", GetAttName(attrs[i]).c_str(), ",");
 		os += temp;
 	}
 	
-	temp.Format("%s)", GetAttName(attrs[i]));
+	temp.Format("%s)", GetAttName(attrs[i]).c_str());
 	os += temp;
 	
 	return os;
@@ -998,11 +998,11 @@ CString HGROUP_LIST::Dump()
 	
 	for (i=0; (i< GbySize-1); i++) 
 	{
-		temp.Format("%s%s", GetAttName(GbyAtts[i]), ",");
+		temp.Format("%s%s", GetAttName(GbyAtts[i]).c_str(), ",");
 		os += temp;
 	}
 	
-	if (GbySize>0) temp.Format("%s )", GetAttName(GbyAtts[i]));
+	if (GbySize>0) temp.Format("%s )", GetAttName(GbyAtts[i]).c_str());
 	else temp.Format("%s", "Empty set )" );
 	os += temp;
 	
@@ -1067,14 +1067,14 @@ CString P_FUNC_OP::Dump()
 	
 	for (i=0; (AttsSize > 0) && (i< AttsSize-1); i++) 
 	{
-		temp.Format("%s%s", GetAttName(Atts[i]), ",");
+		temp.Format("%s%s", GetAttName(Atts[i]).c_str(), ",");
 		os += temp;
 	}
 	
-	temp.Format("%s)", GetAttName(Atts[i]));
+	temp.Format("%s)", GetAttName(Atts[i]).c_str());
 	os += temp;
 	
-	temp.Format("%s%s", " AS ", RangeVar);
+	temp.Format("%s%s", " AS ", RangeVar.c_str());
 	os += temp;
 	return os;
 }
@@ -1163,12 +1163,12 @@ CString BIT_JOIN::Dump()
 	
 	for (i=0; (size > 0) && (i< size-1); i++) 
 	{
-		temp.Format("%s%s",GetAttName(lattrs[i]),",");
+		temp.Format("%s%s",GetAttName(lattrs[i]).c_str(),",");
 		os += temp;
 	}
 	
 	if( size > 0 ) 
-		temp.Format("%s%s%s",GetAttName(lattrs[i]),
+		temp.Format("%s%s%s",GetAttName(lattrs[i]).c_str(),
 		">," , "<");
 	else
 		temp.Format("%s%s", ">," , "<");
@@ -1177,18 +1177,18 @@ CString BIT_JOIN::Dump()
 	
 	for (i=0; (size > 0) && (i< size-1) ; i++) 
 	{
-		temp.Format("%s%s", GetAttName(rattrs[i]),",");
+		temp.Format("%s%s", GetAttName(rattrs[i]).c_str(),",");
 		os += temp;
 	}
 	
 	if(size>0) 
-		temp.Format("%s%s",GetAttName(rattrs[i]), ">)");
+		temp.Format("%s%s",GetAttName(rattrs[i]).c_str(), ">)");
 	else 
 		temp.Format("%s",">)");
 	
 	os += temp;
 	
-	temp.Format("Using bit Index on %s", GetCollName(CollId) );
+	temp.Format("Using bit Index on %s", GetCollName(CollId).c_str() );
 	os += temp;
 	
 	return os;

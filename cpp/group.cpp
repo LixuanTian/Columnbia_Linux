@@ -96,14 +96,14 @@ FirstPhysMExpr(NULL), LastPhysMExpr(NULL)
 		}
 		temp += " ";
 		
-		CString os;
-		os.Format("addGroup { %d %d \" %s  \"%s} %s",
-			
-			GroupID, int(MExpr), MExpr -> GetOp() -> Dump(),
-			temp, LogProp -> DumpCOVE()
-			);
+	CString os;
+	os.Format("addGroup { %d %ld \" %s  \"%s} %s",
 		
-		OutputCOVE.Write(os, os.GetLength());
+		GroupID, (long)MExpr, MExpr -> GetOp() -> Dump().c_str(),
+		temp.c_str(), LogProp -> DumpCOVE().c_str()
+		);
+	
+	OutputCOVE.Write(os.c_str(), os.GetLength());
 	}
 }
 
@@ -196,14 +196,14 @@ void GROUP::NewMExpr(M_EXPR *MExpr)
 		}
 		temp += " ";
 		
-		CString os;
-		os.Format("addExp { %d %d \" %s  \"%s} %s",
-			
-			GroupID, int(MExpr), MExpr -> GetOp() -> Dump(),
-			temp, LogProp -> DumpCOVE()
-			);
+	CString os;
+	os.Format("addExp { %d %ld \" %s  \"%s} %s",
 		
-		OutputCOVE.Write(os, os.GetLength());
+		GroupID, (long)MExpr, MExpr -> GetOp() -> Dump().c_str(),
+		temp.c_str(), LogProp -> DumpCOVE().c_str()
+		);
+	
+	OutputCOVE.Write(os.c_str(), os.GetLength());
 	}
 }  
 
@@ -321,7 +321,7 @@ CString GROUP::Dump()
 	}
 #endif
 	
-	temp.Format("LowerBound: %s\r\n", LowerBd->Dump() );
+	temp.Format("LowerBound: %s\r\n", LowerBd->Dump().c_str() );
 	os += temp;
 	
 	os += "log_prop: ";
@@ -341,12 +341,12 @@ void GROUP::FastDump()
 	
 	for(MExpr=FirstLogMExpr; MExpr!=NULL; MExpr = MExpr->GetNextMExpr() )
 	{
-		TRACE_FILE("%s ; ", MExpr->Dump() );
+		TRACE_FILE("%s ; ", MExpr->Dump().c_str() );
 		Size++;
 	}
 	for(MExpr=FirstPhysMExpr; MExpr!=NULL; MExpr = MExpr->GetNextMExpr() )	
 	{
-		TRACE_FILE("%s ; ", MExpr->Dump() );
+		TRACE_FILE("%s ; ", MExpr->Dump().c_str() );
 		Size++;
 	}
 	
@@ -356,7 +356,7 @@ void GROUP::FastDump()
 	TRACE_FILE("%s", "Winners:\r\n" );
 	
 #ifdef IRPROP
-	TRACE_FILE("\t%s\n", M_WINNER::mc[GroupID]->Dump());
+	TRACE_FILE("\t%s\n", M_WINNER::mc[GroupID]->Dump().c_str());
 #else
 	Size = Winners.GetSize();
 	PHYS_PROP * PhysProp;
@@ -364,14 +364,14 @@ void GROUP::FastDump()
 	for(int i = 0; i < Size; i++) 
 	{
 		PhysProp = Winners[i] -> GetPhysProp();
-		TRACE_FILE("\t%s", PhysProp -> Dump() );
-		TRACE_FILE(", %s", ( Winners[i]->GetMPlan() ? Winners[i]->GetMPlan()-> Dump() : "NULL") );
-		TRACE_FILE(", %s", (Winners[i]->GetCost() ? Winners[i]->GetCost()->Dump() : "-1") );
+		TRACE_FILE("\t%s", PhysProp -> Dump().c_str() );
+		TRACE_FILE(", %s", ( Winners[i]->GetMPlan() ? Winners[i]->GetMPlan()-> Dump().c_str() : "NULL") );
+		TRACE_FILE(", %s", (Winners[i]->GetCost() ? Winners[i]->GetCost()->Dump().c_str() : "-1") );
 		TRACE_FILE(", %s\r\n", (Winners[i]->GetDone() ? "Done" : "Not done") );
 	}
 #endif
 	
-	TRACE_FILE("LowerBound: %s\r\n", LowerBd->Dump() );
+	TRACE_FILE("LowerBound: %s\r\n", LowerBd->Dump().c_str() );
 	
-	TRACE_FILE("log_prop: %s", (*LogProp).Dump() );
+	TRACE_FILE("log_prop: %s", (*LogProp).Dump().c_str() );
 }

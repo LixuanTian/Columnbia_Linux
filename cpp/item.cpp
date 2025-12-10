@@ -41,14 +41,14 @@ ATTR_EXP::ATTR_EXP(CString range_var, int * atts, int size)
 //##ModelId=3B0C087503C9
 CString ATTR_EXP::Dump()
 {	CString os;
-	os.Format("%s%s",GetName()," <");
+	os.Format("%s%s",GetName().c_str()," <");
 	for (int i=0; i<AttsSize-1; i++)
 	{
-		os.Format("%s%s", GetAttName(Atts[i]), ",");
+		os.Format("%s%s", GetAttName(Atts[i]).c_str(), ",");
 	}
 	if (AttsSize==0) os.Format("%s", "Empty set");
-	else os.Format("%s", GetAttName(Atts[AttsSize-1]) );
-	os.Format("%s%s%s", "as ", RangeVar, " >");
+	else os.Format("%s", GetAttName(Atts[AttsSize-1]).c_str() );
+	os.Format("%s%s%s", "as ", RangeVar.c_str(), " >");
 	return os;
 };
 

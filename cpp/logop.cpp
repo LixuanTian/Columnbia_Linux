@@ -53,7 +53,8 @@ GET::GET ( CString collection,  CString rangeVar)
 		INT_ARRAY* AttArray = Cat -> GetAttNames(collectionID);
 		int Size = AttArray -> GetSize();
 		ATTR * attr;
-		for (int i = 0 ; i < Size; i++)  //For each attribute
+		int i;
+		for (i = 0 ; i < Size; i++)  //For each attribute
 		{
 			attr = new ATTR(* (Cat -> GetAttr(AttArray -> GetAt(i)) ) );
 			DOM_TYPE domain = Cat->GetDomain(AttArray->GetAt(i));
@@ -62,7 +63,7 @@ GET::GET ( CString collection,  CString rangeVar)
 		}
 		
 		PTRACE2("Catalog content after fixing AttId-based tables for range %s:\r\n%s", 
-			RangeVar, Cat->Dump());
+			RangeVar.c_str(), Cat->Dump().c_str());
 		//OutputFile.Flush();
 		
 		//Get all indexes and ditto
@@ -82,7 +83,7 @@ GET::GET ( CString collection,  CString rangeVar)
 			}
 		}
 		PTRACE2("Catalog content after fixing IndId-based tables for range %s:\r\n%s", 
-			RangeVar, Cat->Dump());
+			RangeVar.c_str(), Cat->Dump().c_str());
 		
 		//Get all bit indexes and ditto
 		INT_ARRAY* BitIndArray = Cat -> GetBitIndNames(collectionID);
@@ -101,7 +102,7 @@ GET::GET ( CString collection,  CString rangeVar)
 			}
 		}
 		PTRACE2("Catalog content after fixing BitIndId-based tables for range %s:\r\n%s", 
-			RangeVar, Cat->Dump());
+			RangeVar.c_str(), Cat->Dump().c_str());
 		
 		//Populate all relevant CollId-based tables
 		//Should use a cinstructor here but it's already in use.
@@ -109,7 +110,7 @@ GET::GET ( CString collection,  CString rangeVar)
 		*collp = *( Cat -> GetCollProp(collectionID) ); //Will be in catalog
 		collp -> update(RangeVar);
 		Cat -> AddColl(RangeVar, collp );
-		PTRACE("Catalog content after fixing CollId-based tables:\r\n%s", Cat->Dump());
+		PTRACE("Catalog content after fixing CollId-based tables:\r\n%s", Cat->Dump().c_str());
 	}
 	
 	if (TraceOn && !ForGlobalEpsPruning) ClassStat[C_GET].New();
@@ -133,7 +134,7 @@ GET::GET( GET& Op )
 CString GET::Dump()
 {
 	CString os;
-	os.Format("%s%s%s%s",GetName(),"(" , GetCollName(CollId) , ")");
+	os.Format("%s%s%s%s",GetName().c_str(),"(" , GetCollName(CollId).c_str() , ")");
 	return os;
 }
 
@@ -231,12 +232,12 @@ CString EQJOIN::Dump()
 	
 	for (i=0; (size > 0) && (i< size-1); i++) 
 	{
-		temp.Format("%s%s", GetAttName(lattrs[i]), ",");
+		temp.Format("%s%s", GetAttName(lattrs[i]).c_str(), ",");
 		os += temp;
 	}
 	
 	if( size > 0 ) 
-		temp.Format("%s%s%s", GetAttName(lattrs[i]),
+		temp.Format("%s%s%s", GetAttName(lattrs[i]).c_str(),
 		">," , "<");
 	else
 		temp.Format("%s%s", ">," , "<");
@@ -245,12 +246,12 @@ CString EQJOIN::Dump()
 	
 	for (i=0; (size > 0) && (i< size-1) ; i++) 
 	{
-		temp.Format("%s%s", GetAttName(rattrs[i]),",");
+		temp.Format("%s%s", GetAttName(rattrs[i]).c_str(),",");
 		os += temp;
 	}
 	
 	if(size>0) 
-		temp.Format("%s%s",GetAttName(rattrs[i]), ">)");
+		temp.Format("%s%s",GetAttName(rattrs[i]).c_str(), ">)");
 	else 
 		temp.Format("%s",">)");
 	
@@ -498,7 +499,7 @@ DUMMY::DUMMY( DUMMY& Op)
 CString DUMMY::Dump()
 {
 	CString os;
-	os.Format("%s",GetName());
+	os.Format("%s",GetName().c_str());
 	return os;
 }
 
@@ -636,11 +637,11 @@ CString PROJECT::Dump()
 	
 	for (i=0; (size > 0) && (i< size-1); i++) 
 	{
-		temp.Format("%s%s", GetAttName(attrs[i]), ",");
+		temp.Format("%s%s", GetAttName(attrs[i]).c_str(), ",");
 		os += temp;
 	}
 	
-	temp.Format("%s)", GetAttName(attrs[i]));
+	temp.Format("%s)", GetAttName(attrs[i]).c_str());
 	os += temp;
 	
 	return os;
@@ -672,6 +673,7 @@ LOG_PROP* SELECT::FindLogProp (LOG_PROP ** input)
 	
     double old_cucard, new_cucard, new_card;
     double sel = pred_input -> Selectivity;
+	int i;
 	
     SCHEMA * new_schema = new SCHEMA(*(rel_input -> Schema));
     
@@ -928,11 +930,11 @@ CString AGG_LIST::Dump()
 	
 	for (i=0; (i< GbySize-1); i++) 
 	{
-		temp.Format("%s%s", GetAttName(GbyAtts[i]), ",");
+		temp.Format("%s%s", GetAttName(GbyAtts[i]).c_str(), ",");
 		os += temp;
 	}
 	
-	if (GbySize>0) temp.Format("%s )", GetAttName(GbyAtts[i]));
+	if (GbySize>0) temp.Format("%s )", GetAttName(GbyAtts[i]).c_str());
 	else temp.Format("%s", "Empty set )" );
 	os += temp;
 	
@@ -1045,14 +1047,14 @@ CString FUNC_OP::Dump()
 	
 	for (i=0; (AttsSize > 0) && (i< AttsSize-1); i++) 
 	{
-		temp.Format("%s%s", GetAttName(Atts[i]), ",");
+		temp.Format("%s%s", GetAttName(Atts[i]).c_str(), ",");
 		os += temp;
 	}
 	
-	temp.Format("%s)", GetAttName(Atts[i]));
+	temp.Format("%s)", GetAttName(Atts[i]).c_str());
 	os += temp;
 	
-	temp.Format("%s%s", " AS ", RangeVar);
+	temp.Format("%s%s", " AS ", RangeVar.c_str());
 	os += temp;
 	return os;
 }

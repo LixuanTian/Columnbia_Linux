@@ -12,8 +12,8 @@ Columbia Optimizer Framework
 #ifndef SUPP_H
 #define SUPP_H
 
-#include "stdafx.h"	// general definitions
 
+#include "defs.h"
 class SET_TRACE;	// set trace flag
 class OPT_STAT;		// opt statistics
 class CLASS_STAT;	// class statistics
@@ -91,7 +91,7 @@ public:
 	CString Dump() 
 	{	CString os ;
 	os.Format("MemUse = %d, %-16s --- Size = %d, Total = %d , Max = %d , Count = %d\r\n",
-		Max*Size, Name, Size, Total, Max, Count );
+		Max*Size, Name.c_str(), Size, Total, Max, Count );
 	return os;
 	};
 }; // class CLASS_STAT
@@ -795,14 +795,15 @@ public:
 	//##ModelId=3B0C08630066
 	CString Dump()
 	{	CString os;
+	CString freeVarsDump = FreeVars.Dump();
 	os.Format("Max : %.0f, Min : %.0f, CuCard : %.0f, Selectivity : %.3f, FreeVars : %s\r\n",
-		Max, Min, CuCard, Selectivity, FreeVars.Dump() );
+		Max, Min, CuCard, Selectivity, freeVarsDump.c_str() );
 	return os;
 	};
 	
 	// Temporary, till we use LOG_ITEM_PROPs in COVE
 	//##ModelId=3B0C08630070
-	CString LOG_ITEM_PROP::DumpCOVE()
+	CString DumpCOVE()
 	{
 		CString os = "Error";
 		//os.Format("%d %d %s%s%s \r\n",Card, UCard, "{", (*Schema).DumpCOVE(), "}");
@@ -1119,7 +1120,9 @@ public:
 	   CString Dump()
 	   {
 		   CString os;
-		   os.Format("Prop: %s, UB: %s", ReqdPhys->Dump(), UpperBd->Dump() );
+		   CString physDump = ReqdPhys->Dump();
+		   CString costDump = UpperBd->Dump();
+		   os.Format("Prop: %s, UB: %s", physDump.c_str(), costDump.c_str() );
 		   //		os.Format("Prop: %s, UB: %s", ReqdPhys==NULL ? "ANY" : ReqdPhys->Dump(), UpperBd->Dump() );
 		   
 		   return os;

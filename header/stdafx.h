@@ -5,11 +5,22 @@
 
 #if !defined(AFX_STDAFX_H__1801B689_FC90_11D0_8172_ED1BA299B528__INCLUDED_)
 #define AFX_STDAFX_H__1801B689_FC90_11D0_8172_ED1BA299B528__INCLUDED_
+#define LINUX_PORT
 
 #if _MSC_VER >= 1000
 #pragma once
 #endif // _MSC_VER >= 1000
 
+#ifdef LINUX_PORT
+// Linux includes
+#include "linux_compat.h"
+#include <assert.h>
+#include <cmath>
+#include <ctime>
+#include <fstream>
+#include <iostream>
+#else
+// Windows includes
 #define VC_EXTRALEAN		// Exclude rarely-used stuff from Windows headers
 
 #include <afxwin.h>         // MFC core and standard components
@@ -25,8 +36,11 @@
 #include <sys/timeb.h>
 #include <direct.h>
 #include <fstream.h>
+#endif // LINUX_PORT
 
+#ifndef LINUX_PORT
 #include "wcol.h"
+#endif
 #include "defs.h"
 #ifdef USE_MEMORY_MANAGER
 	#include "bm.h"

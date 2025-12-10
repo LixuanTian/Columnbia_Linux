@@ -65,7 +65,7 @@ CAT::CAT(CString filename)
 	IndTable.Add("");
 	BitIndTable.Add("");	//632
 	
-	if((fp = fopen(filename,"r"))==NULL) 
+	if((fp = fopen(filename.c_str(),"r"))==NULL) 
 		OUTPUT_ERROR("can not open file 'catalog'");
 	
 	bool FirstTime = true;
@@ -717,8 +717,8 @@ CString CAT::Dump()
 	os += "******* COLL_PROP: ********\r\n";
 	for(int CollId = 1; CollId < CollProps.GetSize(); CollId++)
 	{
-		temp.Format("%s%s%s%s", GetCollName(CollId) , ":\r\n",
-			CollProps[CollId]->Dump() , "\r\n");
+		temp.Format("%s%s%s%s", GetCollName(CollId).c_str() , ":\r\n",
+			CollProps[CollId]->Dump().c_str() , "\r\n");
 		os += temp;
 	}
 	
@@ -726,8 +726,8 @@ CString CAT::Dump()
 	os += "\r\n******** ATT_PROP: ********\r\n";	  
 	for(int AttId = 1; AttId < Attrs.GetSize(); AttId++)
 	{
-		temp.Format("%s%s%s%s", GetAttName(AttId) , ":\r\n",
-			Attrs[AttId]->Dump() , "\r\n");
+		temp.Format("%s%s%s%s", GetAttName(AttId).c_str() , ":\r\n",
+			Attrs[AttId]->Dump().c_str() , "\r\n");
 		os += temp;
 	}
 	
@@ -735,8 +735,8 @@ CString CAT::Dump()
 	os += "\r\n******** IND_PROP: ********\r\n";	  
 	for(int IndId = 1; IndId < IndProps.GetSize(); IndId++)
 	{
-		temp.Format("%s%s%s%s", GetIndName(IndId) , ":\r\n",
-			IndProps[IndId]->Dump() , "\r\n");
+		temp.Format("%s%s%s%s", GetIndName(IndId).c_str() , ":\r\n",
+			IndProps[IndId]->Dump().c_str() , "\r\n");
 		os += temp;
 	}
 	
@@ -744,8 +744,8 @@ CString CAT::Dump()
 	os += "\r\n******** BIT_IND_PROP: ********\r\n";	  
 	for(int BitIndId = 1; BitIndId < BitIndProps.GetSize(); BitIndId++)
 	{
-		temp.Format("%s%s%s%s", GetBitIndName(BitIndId) , ":\r\n",
-			BitIndProps[BitIndId]->Dump() , "\r\n");
+		temp.Format("%s%s%s%s", GetBitIndName(BitIndId).c_str() , ":\r\n",
+			BitIndProps[BitIndId]->Dump().c_str() , "\r\n");
 		os += temp;
 	}
 	
